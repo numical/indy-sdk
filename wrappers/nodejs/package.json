@@ -1,0 +1,28 @@
+{
+  "name": "hyperledger-indy",
+  "version": "0.0.1",
+  "description": "Node.js SDK for Hyperledger Indy",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap src/*.test.js",
+    "test:cov": "tap --cov src/*.test.js"
+  },
+  "keywords": [
+    "hyperledger",
+    "indy",
+    "sdk",
+    "node",
+    "node.js"
+  ],
+  "author": "mike.evans@numical.com",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "dependencies": {
+    "ffi": "^2.2.0"
+  },
+  "devDependencies": {
+    "tap": "^11.0.1"
+  }
+}
