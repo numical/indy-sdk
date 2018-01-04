@@ -4,8 +4,9 @@
   "description": "Node.js SDK for Hyperledger Indy",
   "main": "index.js",
   "scripts": {
-    "test": "tap src/*.test.js",
-    "test:cov": "tap --cov src/*.test.js"
+    "test": "LIBINDY_PATH=../../libindy/target/release/libindy tap src/*.test.js",
+    "test:debug": "DEBUG=ffi:*,indy-sdk:* LIBINDY_PATH=../../libindy/target/release/libindy tap src/*.test.js",
+    "test:cov": "LIBINDY_PATH=../../libindy/target/release/deps/libindy tap --cov src/*.test.js"
   },
   "keywords": [
     "hyperledger",
@@ -20,6 +21,7 @@
     "node": ">=8.9.0"
   },
   "dependencies": {
+    "debug": "^3.1.0",
     "ffi": "^2.2.0"
   },
   "devDependencies": {
