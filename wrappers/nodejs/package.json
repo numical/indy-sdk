@@ -23,6 +23,7 @@
     "ffi": "^2.2.0"
   },
   "devDependencies": {
-    "tap": "^11.0.1"
+    "tap": "^11.0.1",
+    "testdouble": "^3.3.0"
   }
 }
