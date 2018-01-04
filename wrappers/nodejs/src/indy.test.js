@@ -1,7 +1,7 @@
 const indy = require('./indy.js');
 const bindings = require('./bindings.js');
 const { test, only } = require('tap');
-const { func, verify } = require('testdouble');
+const { func, verify, when } = require('testdouble');
 
 test('all bindings exposed in API', (test) => {
   bindings.forEach((bindingSpec) => {
@@ -12,15 +12,25 @@ test('all bindings exposed in API', (test) => {
   test.end();
 });
 
-test('all bindings called with no args return a resolved Promise', (test) => {
+test('all bindings called with no args return a rejected Promise', (test) => {
   bindings.forEach((bindingSpec) => {
     const { jsFn } = bindingSpec;
-    test.resolves(indy[jsFn]());
+    test.rejects(indy[jsFn]());
   });
   test.end();
 });
 
-test('all bindings call a passed callback', (test) => {
+test('all bindings passed a callback call it', (test) => {
+  bindings.forEach((bindingSpec) => {
+    const { jsFn } = bindingSpec;
+    const callback = func();
+    when(indy[jsFn]()).thenCallback(err);
+    // verify(callback());
+  });
+  test.end();
+});
+/*
+test('all bindings called with only a callback, callback an error', (test) => {
   bindings.forEach((bindingSpec) => {
     const { jsFn } = bindingSpec;
     const callback = func();
@@ -29,3 +39,4 @@ test('all bindings call a passed callback', (test) => {
   });
   test.end();
 });
+*/

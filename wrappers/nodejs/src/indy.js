@@ -1,12 +1,12 @@
 const bindings = require('./bindings.js');
+const createJsApiFn = require('./createJsApiFn.js');
 const debug = require('debug')('indy-sdk:indy');
-const dummyFunction = require('./dummyFunction.js');
 const ffi = require('ffi');
 const path = require('path');
 
-const getLibraryPath = () => (process.env.LIBINDY_PATH) ? 
-  path.resolve(process.env.LIBINDY_PATH) :
-  'libindy';
+const getLibraryPath = () => (process.env.LIBINDY_PATH)
+  ? path.resolve(process.env.LIBINDY_PATH)
+  : 'libindy';
 
 const bindToLibrary = () => {
   const libPath = getLibraryPath();
@@ -24,19 +24,17 @@ const bindToLibrary = () => {
     err.message = err.message + ` (LIBRARY PATH : ${libPath}`;
     throw err;
   }
-}
+};
 
-const createApiFn = (bindingSpec) => dummyFunction;
-
-const defineApi = () => {
-  bindToLibrary();
+const defineJsApi = () => {
+  const libindy = bindToLibrary();
   debug('defining API');
   const api = {};
   bindings.forEach((bindingSpec) => {
-    const { jsFn } = bindingSpec;
-    api[jsFn] = createApiFn(bindingSpec);
+    const { jsFn, libFn } = bindingSpec;
+    api[jsFn] = createJsApiFn(libindy[libFn], bindingSpec);
   });
   return api;
 };
 
-module.exports = defineApi();
+module.exports = defineJsApi();
