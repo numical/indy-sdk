@@ -1,7 +1,7 @@
 const indy = require('./indy.js');
 const bindings = require('./bindings.js');
-const { test } = require('tap');
-const { func, matchers, verify } = require('testdouble');
+const { test, only } = require('tap');
+const { func, verify, when } = require('testdouble');
 
 test('all bindings exposed in API', (test) => {
   bindings.forEach((bindingSpec) => {
@@ -14,13 +14,22 @@ test('all bindings exposed in API', (test) => {
 
 test('all bindings called with no args return a rejected Promise', (test) => {
   bindings.forEach((bindingSpec) => {
-    const { jsFnName } = bindingSpec;
-    test.rejects(indy[jsFnName]());
+    const { jsFn } = bindingSpec;
+    test.rejects(indy[jsFn]());
   });
   test.end();
 });
 
-test('all bindings passed a callback only, callback an error', (test) => {
+test('all bindings passed a callback call it', (test) => {
+  bindings.forEach((bindingSpec) => {
+    const { jsFn } = bindingSpec;
+    const callback = func();
+    when(indy[jsFn]()).thenCallback(err);
+  });
+  test.end();
+});
+
+test('all bindings called with only a callback, callback an error', (test) => {
   bindings.forEach((bindingSpec) => {
     const { jsFnName } = bindingSpec;
     const callback = func();
