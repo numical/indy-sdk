@@ -1,7 +1,10 @@
 const indy = require('./indy.js');
 const bindings = require('./bindings.js');
-const { test, only } = require('tap');
-const { func, verify, when } = require('testdouble');
+const { test } = require('tap');
+const { func, matchers, verify } = require('testdouble');
+
+const skip = {skip: true};
+// const bail = {bail: true};
 
 test('all bindings exposed in API', (test) => {
   bindings.forEach((bindingSpec) => {
@@ -14,17 +17,8 @@ test('all bindings exposed in API', (test) => {
 
 test('all bindings called with no args return a rejected Promise', (test) => {
   bindings.forEach((bindingSpec) => {
-    const { jsFn } = bindingSpec;
-    test.rejects(indy[jsFn]());
-  });
-  test.end();
-});
-
-test('all bindings passed a callback call it', (test) => {
-  bindings.forEach((bindingSpec) => {
-    const { jsFn } = bindingSpec;
-    const callback = func();
-    when(indy[jsFn]()).thenCallback(err);
+    const { jsFnName } = bindingSpec;
+    test.rejects(indy[jsFnName]());
   });
   test.end();
 });
@@ -39,7 +33,7 @@ test('all bindings called with only a callback, callback an error', (test) => {
   test.end();
 });
 
-test('all bindings passed correct args, return a rejected Promise', (test) => {
+test('all bindings passed correct args, return a rejected Promise', skip, (test) => {
   bindings.forEach((bindingSpec) => {
     const { jsFnName, jsApi } = bindingSpec;
     const args = jsApi.slice(0, -1).map((name, index) => `arg${index}`);
@@ -48,7 +42,7 @@ test('all bindings passed correct args, return a rejected Promise', (test) => {
   test.end();
 });
 
-test('all bindings passed correct args with a callback, callback an error', (test) => {
+test('all bindings passed correct args with a callback, callback an error', skip, (test) => {
   bindings.forEach((bindingSpec) => {
     const { jsFnName, jsApi } = bindingSpec;
     const args = jsApi.slice(0, -1).map((name, index) => `arg${index}`);

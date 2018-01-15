@@ -43,13 +43,13 @@ const callLibrary = (libFnName, libFn, jsCallback, args) => {
       allowGarbageCollection(commandHandle);
       const error = new Error(getErrorMessage(errorCode));
       callbackDebug(libFnName, 'returned with errorCode', errorCode, error.message);
-      // jsCallback(error);
+      jsCallback(error);
     }
   } catch (error) {
     allowGarbageCollection(commandHandle);
     callbackDebug(libFnName, 'threw an error', error.message);
     // ffi js code can also throw errors before lib code ever hit
-    // jsCallback(error);
+    jsCallback(error);
   }
 };
 
