@@ -3,7 +3,7 @@ const debug = require('debug')('indy-sdk:createJsApiFn');
 const callbackDebug = require('debug')('indy-sdk:ffi');
 const ffi = require('ffi');
 const { isFailure, getErrorMessage } = require('./errors.js');
-const { allowGarbageCollection, preventGarbageCollection } = require('./garbageCollectionPrevention.js');
+const { allowGarbageCollection, preventGarbageCollection } = require('./garbageManagement.js');
 
 const createFfiCallback = (libFnName, jsCallback) => (commandHandle, errorCode) => {
   allowGarbageCollection(commandHandle);
@@ -37,7 +37,7 @@ const callLibrary = (libFnName, libFn, jsCallback, args) => {
   // call library function
   try {
     debug(libFnName, 'call with args', args);
-    const errorCode = libFn(...args);
+    const errorCode = libFn.async(...args);
     // if a library error, lib does not call callback, so must handle error explicity
     if (isFailure(errorCode)) {
       allowGarbageCollection(commandHandle);

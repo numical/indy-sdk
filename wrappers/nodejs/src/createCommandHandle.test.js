@@ -1,7 +1,7 @@
 const createCommandHandle = require('./createCommandHandle.js');
-const { test } = require('tap');
+const t = require('tap');
 
-test('createCommandHandle generates a sequence', (test) => {
+t.test('createCommandHandle generates a sequence', (test) => {
   for (let i = 0; i < 10; i++) {
     test.equal(createCommandHandle(), i);
   }
